@@ -1,0 +1,38 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+
+Vagrant.configure("2") do |config|
+    config.vm.box = "centos/7"
+    config.vm.hostname = "magento"
+    config.vm.network "private_network", ip: "192.168.33.12"
+    config.vm.synced_folder ".", "/vagrant", :mount_options => ["dmode=777","fmode=666"]
+
+    config.vm.provision "shell", inline: <<-SHELL
+     echo ==== VM Provisioning occuring in `pwd` on `hostname` ==========
+     yum update
+     cp /usr/share/zoneinfo/America/Los_Angeles /etc/localtime
+     yum install -y lsof net-tools bind-utils-9.9.4-72.el7.x86_64 wget unzip
+     echo ""
+     echo ==== Install X11 for graphical tools ==========
+     yum install -y xclock xorg-x11-server-Xorg.x86_64 xorg-x11-xauth.x86_64
+     echo ""
+     echo ==== Restore bash init file ==========
+     cp /vagrant/.bash* /home/vagrant/; chown vagrant.vagrant /home/vagrant/.bash*
+     echo ""
+     echo ==== Restore XAMPP ==========
+     (cd /opt/; tar xvzf /vagrant/lampp.tar.gz) 
+     echo ""
+     echo ==== Creating mysql user for MySQL Datatbase ==========
+     useradd -d /home/mysql mysql
+     chown -R mysql.mysql /opt/lampp/var/mysql
+     echo ""
+     echo ==== Starting Apache, MySQL, XAMPP ==========
+     /opt/lampp/lampp start
+     echo ""
+     echo ==== Configuring and starting Magento ==========
+     #ln -s /home/vagrant/magento /opt/lampp/htdocs/magento
+     echo ""
+   SHELL
+
+end

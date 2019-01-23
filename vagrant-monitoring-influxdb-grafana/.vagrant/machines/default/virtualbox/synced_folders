@@ -1,0 +1,1 @@
+{"rsync":{"/vagrant":{"type":"rsync","guestpath":"/vagrant","hostpath":"/Users/myusuf/work/cos1/vagrant-monitoring-influxdb-grafana","disabled":false,"__vagrantfile":true,"owner":"vagrant","group":"vagrant"}}}

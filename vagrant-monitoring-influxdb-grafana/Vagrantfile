@@ -1,0 +1,46 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+
+Vagrant.configure("2") do |config|
+    config.vm.box = "centos/7"
+    config.vm.hostname = "grafana-infodb"
+    config.vm.network "private_network", ip: "192.168.33.11"
+
+    config.vm.provision "shell", inline: <<-SHELL
+     echo ==== VM Provisioning occuring in `pwd` on `hostname`==========
+     yum update
+     yum install -y lsof net-tools bind-utils-9.9.4-72.el7.x86_64
+
+     echo ==== installing java,wget,etc ==========
+     yum install -y java wget
+
+
+     echo ==== InfluxDB: installing in `pwd` ==========
+     mkdir work; cd work
+     wget https://dl.influxdata.com/influxdb/releases/influxdb-1.7.2_linux_amd64.tar.gz
+     tar xvfz influxdb-1.7.2_linux_amd64.tar.gz
+
+     echo ==== Grafana: installing ==========
+     wget https://dl.grafana.com/oss/release/grafana-5.4.3-1.x86_64.rpm 
+     yum -y localinstall grafana-5.4.3-1.x86_64.rpm 
+     /bin/systemctl daemon-reload
+     /bin/systemctl enable grafana-server.service
+     /bin/systemctl start grafana-server.service
+
+
+     echo ==== Telegraf: installing ==========
+     cat <<EOF | tee /etc/yum.repos.d/influxdb.repo
+[influxdb]
+name = InfluxDB Repository - RHEL \\$releasever
+baseurl = https://repos.influxdata.com/rhel/\\$releasever/\\$basearch/stable
+enabled = 1
+gpgcheck = 1
+gpgkey = https://repos.influxdata.com/influxdb.key
+EOF
+
+  yum install -y telegraf
+  systemctl start telegraf
+
+   SHELL
+end
