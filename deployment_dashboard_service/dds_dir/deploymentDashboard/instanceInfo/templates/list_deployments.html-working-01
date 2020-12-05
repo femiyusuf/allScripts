@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        table, th, td {
+    border: 1px solid black;
+}
+th {
+    cursor: pointer;
+}
+    </style>
+    <script src="/scripts/snippet-javascript-console.min.js?v=1"></script>
+</head>
+<table id="deploymentTable" class="w3-table-all">
+    <!--     
+    <tr>
+      <th onclick="w3.sortHTML('#deploymentTable', '.item', 'td:nth-child(1)')">Hostname</th>
+      <th onclick="w3.sortHTML('#deploymentTable', '.item', 'td:nth-child(2)')">Module</th>
+      <th onclick="w3.sortHTML('#deploymentTable', '.item', 'td:nth-child(3)')">Version</th>
+      <th onclick="w3.sortHTML('#deploymentTable', '.item', 'td:nth-child(4)')">Seervices</th>
+      <th onclick="w3.sortHTML('#deploymentTable', '.item', 'td:nth-child(5)')">Triggerer</th>
+      <th onclick="w3.sortHTML('#deploymentTable', '.item', 'td:nth-child(6)')">Date</th>
+    </tr> 
+    -->
+    <tr>
+        <th>Hostname</th>
+        <th>Module</th>
+        <th>Version</th>
+        <th>Services</th>
+        <th>Triggerer</th>
+        <th>Date</th>
+    </tr>
+    {% for instance in instances %}
+        <tr>
+            <td>
+                {{ instance.targetAppliance }}
+            </td>
+            <td>
+                {{ instance.moduleType }}
+            </td>
+            <td>
+                {{ instance.version }}
+            </td>
+            <td>
+                {{ instance.services }}
+            </td>
+            <td>
+                {{ instance.triggerer }}
+            </td>
+            <td>
+                {{ instance.timeStamp }} 
+            </td>
+
+        </tr>
+
+    {% endfor %}
+
+</table>
+    <script type="text/javascript">
+        const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
+
+const comparer = (idx, asc) => (a, b) => ((v1, v2) => 
+    v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
+    )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx));
+
+// do the work...
+document.querySelectorAll('th').forEach(th => th.addEventListener('click', (() => {
+    const table = th.closest('table');
+    Array.from(table.querySelectorAll('tr:nth-child(n+2)'))
+        .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
+        .forEach(tr => table.appendChild(tr) );
+})));
+    </script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Testing table filter - title</title>
+</head>
+<body>
+
+    <h1>Deployment Dashboard Service - Under Construction</h1>
+
+
+
+<table id="demo">
+    <thead>
+        <tr>
+            <th>Hostname</th>
+            <th>Module</th>
+            <th>Version</th>
+            <th>Services</th>
+            <th>Triggerer</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for instance in instances %}
+        <tr>
+            <td>
+                {{ instance.targetAppliance }}
+            </td>
+            <td>
+                {{ instance.moduleType }}
+            </td>
+            <td>
+                {{ instance.version }}
+            </td>
+            <td>
+                {{ instance.services }}
+            </td>
+            <td>
+                {{ instance.triggerer }}
+            </td>
+            <td>
+                {{ instance.timeStamp }} 
+            </td>
+
+        </tr>
+
+    {% endfor %}
+
+    </tbody>
+</table>
+
+{% load static %}
+<script src="{% static "/tablefilter/tablefilter.js" %}"></script>
+
+
+<script data-config>
+    var filtersConfig = {
+        base_path: "{% static "/tablefilter/" %}",
+        col_1: 'select',
+        col_2: 'select',
+        col_4: 'select',
+        alternate_rows: true,
+        rows_counter: true,
+        btn_reset: true,
+        loader: true,
+        status_bar: true,
+        mark_active_columns: true,
+        highlight_keywords: true,
+        col_types: [
+            'string', 'string', 'string',
+            'string', 'string', 'string',
+        ],
+        col_widths: [
+            '220px', '50px', '50px',
+            '150px', '100px', '100px',
+            '70px', '70px', '100px'
+        ],
+        extensions:[{ name: 'sort' }]
+    };
+
+    var tf = new TableFilter('demo', filtersConfig);
+    tf.init();
+
+</script>
+
+<pre></pre>
+
+
+</body>
+</html>
