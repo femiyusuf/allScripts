@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        table, th, td {
+    border: 1px solid black;
+}
+th {
+    cursor: pointer;
+}
+    </style>
+</head>
+
+<h2>Deployment Dashboard Service - Under Construction</h2>
+
+
+<input type="text" id="myInput1" onkeyup="searchHostname()" placeholder="Search for Hostname.." title="Type in a name">
+<input type="text" id="myInput2" onkeyup="searchModuleType()" placeholder="Search for Module.." title="Type in a name">
+<input type="text" id="myInput3" onkeyup="searchVersion()" placeholder="Search for Version.." title="Type in a name">
+
+
+<table id="deploymentTable" class="w3-table-all">
+    <tr>
+        <th>Hostname</th>
+        <th>Module</th>
+        <th>Version</th>
+        <th>Services</th>
+        <th>Triggerer</th>
+        <th>Date</th>
+    </tr>
+    {% for instance in instances %}
+        <tr>
+            <td>
+                {{ instance.targetAppliance }}
+            </td>
+            <td>
+                {{ instance.moduleType }}
+            </td>
+            <td>
+                {{ instance.version }}
+            </td>
+            <td>
+                {{ instance.services }}
+            </td>
+            <td>
+                {{ instance.triggerer }}
+            </td>
+            <td>
+                {{ instance.timeStamp }} 
+            </td>
+
+        </tr>
+
+    {% endfor %}
+
+</table>
+
+
+
+<script>
+    function searchHostname() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput1");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("deploymentTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                   tr[i].style.display = "none";
+                }
+            }       
+       }
+    }
+    function searchModuleType() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput2");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("deploymentTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                   tr[i].style.display = "none";
+                }
+            }       
+       }
+    }
+
+    function searchVersion() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput3");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("deploymentTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[2];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                   tr[i].style.display = "none";
+                }
+            }       
+       }
+    }
+
+</script>
+
+</body>
+</html>
